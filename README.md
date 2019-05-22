@@ -7,5 +7,11 @@ So let's begin:
 Consider the level as starting point for programming knowledge.It has a picture with written over picture as 2^38^. The hint given is "Try chaning url."
 So lets first calculate 2^38^.  
 Once calculated, we will replace zero in url with that value.  
-That's it.
+That's it.   
+The answer url is http://www.pythonchallenge.com/pc/def/274877906944.html
+
+### Level 1:
+The level consist of cipher text which need to be decrypt to reach next level. The hint given as K - M, O -> Q , E -> G. This is nothing but ceaser cipher. Now, from given hint, the key is obviously 2. 
+Now data is all small letters and some symbols, which no need to replace. Solving for given string will give us hint to apply same for url.Applying the resulting string will be 
+http://www.pythonchallenge.com/pc/def/ocr.html
 
