@@ -15,3 +15,7 @@ The level consist of cipher text which need to be decrypt to reach next level. T
 Now data is all small letters and some symbols, which no need to replace. Solving for given string will give us hint to apply same for url.Applying the resulting string will be 
 http://www.pythonchallenge.com/pc/def/ocr.html
 
+### Level 2:
+For the next level, we need to dig through source code of webpage. In given webpage source, there is mess of character is given and hint is given as find rarest character.
+So using dictionary, we get rarest characters and they form the word "equality". So resultant url become
+http://www.pythonchallenge.com/pc/def/equality.html
