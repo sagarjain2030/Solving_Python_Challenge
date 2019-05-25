@@ -24,4 +24,8 @@ http://www.pythonchallenge.com/pc/def/equality.html
 For this level, hint given is <i>One small letter, surrounded by EXACTLY three big bodyguards on each of its sides</i>. So, it means exactly 3 capital letters followed by 1 small letter and again followed by 4 capital letters. The data can be found in source code of webpage. 
 In previous as well this challenge, we need to clean the input. In previous challenge, input is manually cleaned. In this case, python can be useful to clean it out.   
 Now, comes to main part.As per hint, we need to find all possible combination where pattern is as per hint.Since pattern, its better to use Regex. From regex, we get 10 such patterns. Now, if we take only middle lower letter, we get string "linkedlist". Let's try it out.The resultant url become: http://www.pythonchallenge.com/pc/def/linkedlist.html
- 
+
+### Level 4: 
+For this level, just look at the source code. The next url will be made such that every new page contains string "next nothing is " and integer value. This integer value needs to be fed to url to get to new page.The requrement is to keep going until the necessary file name in found.    
+Remember to look for message since it might have some tweaks and tricks in its sleeves.But till now, I like this challenge and definitely others as well.The resulting url is http://www.pythonchallenge.com/pc/def/peak.html
+
