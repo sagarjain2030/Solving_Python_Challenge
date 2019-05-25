@@ -19,3 +19,9 @@ http://www.pythonchallenge.com/pc/def/ocr.html
 For the next level, we need to dig through source code of webpage. In given webpage source, there is mess of character is given and hint is given as find rarest character.
 So using dictionary, we get rarest characters and they form the word "equality". So resultant url become
 http://www.pythonchallenge.com/pc/def/equality.html
+
+### Level 3:
+For this level, hint given is <i>One small letter, surrounded by EXACTLY three big bodyguards on each of its sides</i>. So, it means exactly 3 capital letters followed by 1 small letter and again followed by 4 capital letters. The data can be found in source code of webpage. 
+In previous as well this challenge, we need to clean the input. In previous challenge, input is manually cleaned. In this case, python can be useful to clean it out.   
+Now, comes to main part.As per hint, we need to find all possible combination where pattern is as per hint.Since pattern, its better to use Regex. From regex, we get 10 such patterns. Now, if we take only middle lower letter, we get string "linkedlist". Let's try it out.The resultant url become: http://www.pythonchallenge.com/pc/def/linkedlist.html
+ 
