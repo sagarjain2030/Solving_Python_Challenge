@@ -45,3 +45,7 @@ Now, the values can be considered as ASCII values. So converting these values in
 ### Level 8:
 Level 8 shows an image with selectable bee. On clicking, it will open a dialog box asking for username and password. But where can we find it?  
 Lets check out source code. The source code contains clear written un and pwd i.e. username and password. This means we can get username andpassword from it. But before that there is some string written "BZh91AY". Searching on google will tell you that its nothing but  compressed using bzip. Decompressing it, will result in username as huge and password as file. Filling these values will lead to result url as http://www.pythonchallenge.com/pc/return/good.html
+
+### Level 9:
+Seeing image, we can remember drawing we used to complete in our childhood where there were dots given and by connecting those dots, we create our drawing.Same thing we need to do here. Checking out the source code, we see two huge length of number arrays. We just need to use those points for drawing. Image will look like cow.So putting cow in url, we get result as its male. So it must be bull. So resulting url will be http://www.pythonchallenge.com/pc/return/bull.html
+
