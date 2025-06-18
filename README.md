@@ -1,19 +1,74 @@
-# Solving_Python_Challenge
-The python challege is kind of online Treasure hunt where one need to use the programming skills to solve (actually to ease) the level.Even though its quite possible to solve levels in programming language, it has been created to use python as prefereble language.
-The link to begin challenge is [here](http://www.pythonchallenge.com/)
-So let's begin:
+# 🧠 Solving Python Challenge
 
-### Level 0:
-Consider the level as starting point for programming knowledge.It has a picture with written over picture as 2^38^. The hint given is "Try chaning url."
-So lets first calculate 2^38^.  
-Once calculated, we will replace zero in url with that value.  
-That's it.   
-The answer url is http://www.pythonchallenge.com/pc/def/274877906944.html
+Welcome to my personal walkthrough of the [Python Challenge](http://www.pythonchallenge.com/) — an online puzzle series designed to enhance your problem-solving skills using Python. Each level presents a unique challenge that often involves decoding images, parsing data, or manipulating text.
 
-### Level 1:
-The level consist of cipher text which need to be decrypt to reach next level. The hint given as K - M, O -> Q , E -> G. This is nothing but ceaser cipher. Now, from given hint, the key is obviously 2. 
-Now data is all small letters and some symbols, which no need to replace. Solving for given string will give us hint to apply same for url.Applying the resulting string will be 
-http://www.pythonchallenge.com/pc/def/ocr.html
+This repository is my implementation of the challenge with:
+- 🧼 Clean, well-commented Python scripts  
+- 📚 Use of only necessary libraries  
+- 🧰 Proper documentation and tooling  
+- 📈 Aiming for clarity, not just completion
+
+---
+
+## 🚀 How to Use This Repo
+
+Each level is solved in its own Python file (`level_00.py`, `level_01.py`, etc.), accompanied by helpful comments explaining the logic and reasoning.
+
+> ✅ **Note**: I solve each puzzle manually before referring to any AI tools or online hints — the goal is skill-building, not just speed.
+
+---
+
+## 🔍 Level 0: 2^38
+
+### 🧩 Challenge:
+The page shows an image with the text `2^38`.  
+Hint provided: **"Try to change the URL."**
+
+### 💡 Idea:
+Compute the value of `2^38` and insert that result into the URL.
+
+### 🐍 Solution (Python):
+```python
+print(2**38)
+```
+---
+## 🔍 Level 1: Caesar Cipher (2-Shift)
+
+### 🧩 Challenge:
+The image shows:  
+K → M  
+O → Q  
+E → G  
+And the hint says:  
+**"Everybody thinks twice before solving this."**  
+You're also given a long encoded message.
+
+### 💡 Idea:
+The clue suggests a **Caesar cipher** with a shift of **+2** (i.e., each letter is replaced by the letter two steps forward).  
+To decode the text, shift every lowercase letter forward by 2, wrapping around at `'z' → 'a'`.
+
+You can do this manually or use Python’s `str.maketrans()` to build a translation table.
+
+### 🐍 Solution (Python):
+```python
+from_str = "abcdefghijklmnopqrstuvwxyz"
+to_str   = "cdefghijklmnopqrstuvwxyzab"
+table = str.maketrans(from_str, to_str)
+
+input_text = "g fmnc wms bgblr rpylqjyrc gr zw fylb. "
+        "rfyrq ufyr amknsrcpq ypc dmp. "
+        "bmgle gr gl zw fylb gq glcddgagclr ylb rfyr'q ufw rfgq rcvr gq qm jmle. "
+        "sqgle qrpgle.kyicrpylq() gq pcamkkclbcb. "
+        "lmu ynnjw ml rfc spj."
+print(input_text.translate(table))
+```
+
+🔗 Final Answer:  
+Apply the same transformation to the URL "map" → "ocr"
+So the next level is:  
+👉 http://www.pythonchallenge.com/pc/def/ocr.html
+
+
 
 ### Level 2:
 For the next level, we need to dig through source code of webpage. In given webpage source, there is mess of character is given and hint is given as find rarest character.
