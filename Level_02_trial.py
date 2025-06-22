@@ -28,5 +28,3 @@ if resp.status_code==200:
             print(ch,end='')
     # this will print the word: equality
     # so the new url is : http://www.pythonchallenge.com/pc/def/equality.html
-
-

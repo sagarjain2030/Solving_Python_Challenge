@@ -69,6 +69,46 @@ So the next level is:
 👉 http://www.pythonchallenge.com/pc/def/ocr.html
 
 
+---
+
+## 🔍 Level 2: Hidden Characters in Page Source
+
+### 🧩 Challenge:
+The image shows an open book, and the hint reads:  
+"recognize the characters. maybe they are in the book,    
+but MAYBE they are in the page source."
+
+That strongly suggests that we need to look at the **HTML source code** of the page.
+
+
+### 🧠 Idea:
+On inspecting the source, we find a huge block of noisy characters.  
+Just above it, there's another line:  
+  **"find rare characters in the mess below."**  
+So we filter only the **alphabetic characters** from that mess — those are the meaningful ones.  
+
+
+### 🐍 Python Solution (Using `requests` and `BeautifulSoup`):
+```python
+import requests
+from bs4 import BeautifulSoup
+
+url = "http://www.pythonchallenge.com/pc/def/ocr.html"
+resp = requests.get(url)
+
+if resp.status_code == 200:
+    soup = BeautifulSoup(resp.text, "html.parser")
+    messy_block = str(soup.contents[-2])
+    result = ''.join([ch for ch in messy_block if ch.isalpha()])
+    print(result)
+
+```
+📤 Output:
+equality
+
+🔗 Final Answer:  
+👉 http://www.pythonchallenge.com/pc/def/equality.html
+
 
 ### Level 2:
 For the next level, we need to dig through source code of webpage. In given webpage source, there is mess of character is given and hint is given as find rarest character.
