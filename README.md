@@ -110,15 +110,66 @@ equality
 👉 http://www.pythonchallenge.com/pc/def/equality.html
 
 
-### Level 2:
-For the next level, we need to dig through source code of webpage. In given webpage source, there is mess of character is given and hint is given as find rarest character.
-So using dictionary, we get rarest characters and they form the word "equality". So resultant url become
-http://www.pythonchallenge.com/pc/def/equality.html
+---
 
-### Level 3:
-For this level, hint given is <i>One small letter, surrounded by EXACTLY three big bodyguards on each of its sides</i>. So, it means exactly 3 capital letters followed by 1 small letter and again followed by 4 capital letters. The data can be found in source code of webpage. 
-In previous as well this challenge, we need to clean the input. In previous challenge, input is manually cleaned. In this case, python can be useful to clean it out.   
-Now, comes to main part.As per hint, we need to find all possible combination where pattern is as per hint.Since pattern, its better to use Regex. From regex, we get 10 such patterns. Now, if we take only middle lower letter, we get string "linkedlist". Let's try it out.The resultant url become: http://www.pythonchallenge.com/pc/def/linkedlist.html
+## 🔍 Level 3: Hidden Letter Surrounded by Capital Letters
+
+### 🧩 Challenge:
+The image shows 7 candles — 3 large on each side, 1 small in the center.  
+The page hint reads:  
+> "One small letter, surrounded by EXACTLY three big bodyguards on each of its sides."
+
+Nothing in the visible webpage stands out — but the hint and page title (“re”) suggest we need **regex** and to inspect the **page source**.
+
+---
+
+### 🧠 Idea:
+In the HTML source, there’s a huge block of noisy characters.  
+We’re looking for a **lowercase letter surrounded by exactly 3 uppercase letters on both sides**.  
+
+Pattern to match:
+```
+AAAxAAA
+```
+Where:
+- `A` = uppercase letter  
+- `x` = the hidden lowercase letter we need
+
+This matches regex:  
+`[a-z][A-Z]{3}[a-z][A-Z]{3}[a-z]`
+
+From each match, we extract the **center lowercase letter**.
+
+### 🐍 Python Solution (Using `requests`, `BeautifulSoup`, and `re`):
+```python
+import requests
+from bs4 import BeautifulSoup
+import re
+
+url = "http://www.pythonchallenge.com/pc/def/equality.html"
+resp = requests.get(url)
+
+if resp.status_code == 200:
+    soup = BeautifulSoup(resp.text, "html.parser")
+    messy_block = str(soup.contents[-2])
+
+    pattern = re.compile(r'[a-z][A-Z]{3}[a-z][A-Z]{3}[a-z]')
+    matches = re.findall(pattern, messy_block)
+
+    middle_char_regex = re.compile(r'[A-Z]([a-z])[A-Z]')
+    for match in matches:
+        print(''.join(middle_char_regex.findall(match)), end='')
+```
+
+📤 Output:
+```
+linkedlist
+```
+
+🔗 Final Answer:  
+👉 http://www.pythonchallenge.com/pc/def/linkedlist.html  
+(The page then redirects to: `linkedlist.php`)  
+👉 Final URL: http://www.pythonchallenge.com/pc/def/linkedlist.php
 
 ### Level 4: 
 For this level, just look at the source code. The next url will be made such that every new page contains string "next nothing is " and integer value. This integer value needs to be fed to url to get to new page.The requrement is to keep going until the necessary file name in found.    
