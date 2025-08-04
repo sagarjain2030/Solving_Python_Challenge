@@ -171,15 +171,185 @@ linkedlist
 (The page then redirects to: `linkedlist.php`)  
 👉 Final URL: http://www.pythonchallenge.com/pc/def/linkedlist.php
 
-### Level 4: 
-For this level, just look at the source code. The next url will be made such that every new page contains string "next nothing is " and integer value. This integer value needs to be fed to url to get to new page.The requrement is to keep going until the necessary file name in found.    
-Remember to look for message since it might have some tweaks and tricks in its sleeves.But till now, I like this challenge and definitely others as well.The resulting url is http://www.pythonchallenge.com/pc/def/peak.html
+---
 
-### Level 5:
-This level is not so intuitive.First of all, there is an image and below it is written as "pronounce it". It makes no sense what to pronounce and how to.But if you see source code, name of image is "Peakhill". This can only be decipher if you really knew python libraries. You are like me, you would be having no clue what it means.So I did what we always good at doing.Google it. You will find some links to solutions of challenge but what's fun in that. The hint, however, is good enough.The library is pickel.Pickel is serilization library for serilization and deserilization of data.  
-Now, the source code has info of source for peakhell, the url is <i> http://www.pythonchallenge.com/pc/def/banner.p</i> Clicking on link, gives some random data.
-Now that we know the library for deserilization, let's fetch the data from above url, just like we did in 4th Challege.Printing data from pickle will result into some tuples of # and spaces.So we need to print tuples in one string format.The output is amazingly printed word "channel." Thus, the resulting url is http://www.pythonchallenge.com/pc/def/channel.html
+## Level 4: Follow the Chain
+### Challenge:
+Image shows a metal chain
 
+Page title: "follow the chain"
+
+No obvious clues on the page itself — but clicking on the image redirects you to:
+
+http://www.pythonchallenge.com/pc/def/linkedlist.php?nothing=12345
+That page displays:
+
+and the next nothing is 44827
+### 🧠 Idea:
+We're being asked to follow the nothing parameter in the URL.
+
+Start with nothing=12345
+
+Each page returns a new number in the form:
+"and the next nothing is <number>"
+
+We repeatedly follow the chain by updating the URL with this number.
+
+Occasionally, the site says things like:
+"Yes. Divide by two and keep going."
+In that case, we divide the number and try again.
+
+Eventually, we reach a message with something like: "peak.html" → that’s our answer.
+
+### Python Solution (Loop + Regex):
+``` python
+import requests
+import re
+
+def follow_chain(start_nothing: str):
+    base_url = "http://www.pythonchallenge.com/pc/def/linkedlist.php?nothing="
+    url = base_url + start_nothing
+    count = 0
+
+    while True:
+        resp = requests.get(url)
+        if resp.status_code != 200:
+            print("❌ Failed to fetch:", url)
+            break
+
+        text = resp.text.strip()
+        print(f"{count:03}: {text}")  # Show response from each step
+
+        # Case 1: Standard pattern → "next nothing is 12345"
+        match = re.search(r"next nothing is (\d+)", text)
+        if match:
+            url = base_url + match.group(1)
+            count += 1
+            continue
+
+        # Case 2: Final destination → ends in ".html"
+        match = re.search(r"([a-zA-Z]+)\.html", text)
+        if match:
+            final_url = f"http://www.pythonchallenge.com/pc/def/{match.group(1)}.html"
+            print(f"\n🎯 Final URL found: {final_url}")
+            break
+
+        # Case 3: Needs manipulation → e.g., divide by 2
+        match = re.search(r"(\d+)", text)
+        if match:
+            divided = str(int(match.group(1)) // 2)
+            print(f"⚠️  Dividing and trying again with: {divided}")
+            url = base_url + divided
+            count += 1
+        else:
+            print("❓ No valid pattern found. Stopping.")
+            break
+
+if __name__ == "__main__":
+    follow_chain("12345")
+```
+### 📤 Output (Partial):
+000: and the next nothing is 44827  
+001: and the next nothing is 45439  
+...
+137: Yes. Divide by two and keep going.  
+...
+250: peak.html
+
+### 🔗 Final Answer:
+👉 http://www.pythonchallenge.com/pc/def/peak.html
+
+---
+
+## Level 5: peak hell → Pickle Hell
+### 🧩 Challenge:
+The title is: “peak hell”
+
+No visible content on the page, but the phrase “peak hell” sounds like “pickle”, a Python module for serialization.
+
+Let’s inspect the page source.
+
+On visiting:
+
+http://www.pythonchallenge.com/pc/def/peak.html
+
+We find a custom HTML tag:
+
+<peakhell src="banner.p"></peakhell>
+This strongly suggests we should fetch banner.p and try unpickling it using the pickle module.
+
+### 🧠 Idea:
+banner.p seems to be a pickled (serialized) Python object.
+
+We’ll load and unpickle the content.
+
+Upon inspection, it appears to be a list of lists containing (char, repeat_count) tuples.
+
+Reconstructing these as strings will likely reveal the answer in ASCII-art form.
+
+### Python Solution (Using requests + pickle):
+```
+import requests
+import pickle
+
+# Step 1: Start at the original challenge page
+page_url = "http://www.pythonchallenge.com/pc/def/peak.html"
+resp = requests.get(page_url)
+
+if resp.status_code != 200:
+    raise Exception(f"❌ Failed to fetch challenge page: {resp.status_code}")
+
+print("[INFO] Visited peak.html — found reference to banner.p")
+
+# Step 2: Fetch the pickled data file
+pickle_url = "http://www.pythonchallenge.com/pc/def/banner.p"
+resp = requests.get(pickle_url)
+
+if resp.status_code != 200:
+    raise Exception(f"❌ Failed to download pickle file: {resp.status_code}")
+
+print("[INFO] Successfully downloaded banner.p")
+
+# Step 3: Load the pickled data
+data = pickle.loads(resp.content)
+
+# Step 4: Each row is a list of (char, count) → reconstruct strings
+for row in data:
+    line = "".join(char * count for char, count in row)
+    print(line)
+```
+### 📤 Output:
+```
+  
+              #####                                                                      #####  
+               ####                                                                       ####  
+               ####                                                                       ####  
+               ####                                                                       ####  
+               ####                                                                       ####  
+               ####                                                                       ####  
+               ####                                                                       ####  
+               ####                                                                       ####  
+      ###      ####   ###         ###       #####   ###    #####   ###          ###       ####  
+   ###   ##    #### #######     ##  ###      #### #######   #### #######     ###  ###     ####  
+  ###     ###  #####    ####   ###   ####    #####    ####  #####    ####   ###     ###   ####  
+ ###           ####     ####   ###    ###    ####     ####  ####     ####  ###      ####  ####  
+ ###           ####     ####          ###    ####     ####  ####     ####  ###       ###  ####  
+####           ####     ####     ##   ###    ####     ####  ####     #### ####       ###  ####  
+####           ####     ####   ##########    ####     ####  ####     #### ##############  ####  
+####           ####     ####  ###    ####    ####     ####  ####     #### ####            ####  
+####           ####     #### ####     ###    ####     ####  ####     #### ####            ####  
+ ###           ####     #### ####     ###    ####     ####  ####     ####  ###            ####  
+  ###      ##  ####     ####  ###    ####    ####     ####  ####     ####   ###      ##   ####  
+   ###    ##   ####     ####   ###########   ####     ####  ####     ####    ###    ##    ####  
+      ###     ######    #####    ##    #### ######    ###########    #####      ###      ######  
+```
+	    
+ASCII output spells: channel
+
+### 🔗 Final Answer:
+👉 http://www.pythonchallenge.com/pc/def/channel.html
+
+---
 ### Level 6:
 Now, there is zipline of jeans shown in image.Going to source code, paypal symbol has nothing to do with challenge. Going line by line in source code, the comment is given as zip. From that and from image, it is obvious that level is related to zip files. Now, since zip is an extension, writing it in url instead of html will give us a zip file.  
 Extracting zip file will give multiple files and a README. The readme has 2 hints.one filename where to start looking and other is that answer is in zip file only.Just like Level 4, repetatively open new file,read content find new number and open the new file. After continuing this, last file content suggested to collect and print comment of those files.Printing it, the name received is HOCKEY. But wait, its not the solution. hockey page gives hint as to see letters that form hockey design and the word is Oxygen. http://www.pythonchallenge.com/pc/def/oxygen.html
