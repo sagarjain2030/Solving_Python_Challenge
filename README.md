@@ -350,10 +350,104 @@ ASCII output spells: channel
 👉 http://www.pythonchallenge.com/pc/def/channel.html
 
 ---
-### Level 6:
-Now, there is zipline of jeans shown in image.Going to source code, paypal symbol has nothing to do with challenge. Going line by line in source code, the comment is given as zip. From that and from image, it is obvious that level is related to zip files. Now, since zip is an extension, writing it in url instead of html will give us a zip file.  
-Extracting zip file will give multiple files and a README. The readme has 2 hints.one filename where to start looking and other is that answer is in zip file only.Just like Level 4, repetatively open new file,read content find new number and open the new file. After continuing this, last file content suggested to collect and print comment of those files.Printing it, the name received is HOCKEY. But wait, its not the solution. hockey page gives hint as to see letters that form hockey design and the word is Oxygen. http://www.pythonchallenge.com/pc/def/oxygen.html
 
+## 🔎 Level 6: “Now there are pairs” — ZIP + Comments
+### 🧩 Challenge Setup
+Image: A zipper (hinting at a ZIP archive)
+
+Title: “now there are pairs” → every step has two parts
+
+the text inside each file (next number)
+
+the ZIP comment on that file (one character)
+
+Hidden HTML hint: <!-- <-- zip --> → replace channel.html with channel.zip
+
+Download:
+http://www.pythonchallenge.com/pc/def/channel.zip
+
+### 🧠 Idea
+Open channel.zip.
+
+Read readme.txt →
+
+welcome to my zipped list.  
+hint1: start from 90052  
+hint2: answer is inside the zip  
+Start at 90052.txt and follow the chain:  
+each file says Next nothing is **_number_**.  
+
+Collect the ZIP comments for every visited file (these form an ASCII banner).
+
+The banner spells the next keyword when you “look at the letters”.
+
+Why “pairs”?
+Because each step has a pair of clues: the file’s text (navigation) and the file’s comment (answer letters).
+
+### 🐍 Python Solution (Zip traversal + comment collection)
+``` python
+from zipfile import ZipFile
+import re
+
+file_name = "channel.zip"
+comments = []
+
+with ZipFile(file_name, "r") as zf:
+    # Optional: see files, and add the archive-level comment (if any)
+    zf.printdir()
+    comments.append(zf.comment.decode("utf-8"))
+
+    # Peek the readme for starting point and hint
+    with zf.open("readme.txt", "r") as f:
+        print(f.read().decode("utf-8"))
+
+    # Follow the chain starting at 90052
+    file_number = "90052"
+    NEXT = re.compile(r"Next nothing is (\d+)")
+    STOP = re.compile(r"Collect the comments")
+
+    while True:
+        name = f"{file_number}.txt"
+        # Collect the per-file ZIP comment (a single character)
+        info = zf.getinfo(name)
+        comments.append(info.comment.decode("utf-8"))
+
+        text = zf.read(name).decode("utf-8")
+        if STOP.search(text):
+            break
+
+        m = NEXT.search(text)
+        if not m:
+            break
+        file_number = m.group(1)
+
+# The collected comments render an ASCII banner; read the letters
+banner = "".join(comments)
+print(banner)
+```
+### 📤 Output (What you’ll see)
+You’ll get an ASCII art banner that visually highlights letters:
+**   OO    OO    XX      YYYY    GG    GG  EEEEEE     NN      **    
+...  
+Reading the letters → O X Y G E N → OXYGEN
+
+### ✅ Final Answer
+Keyword: oxygen
+
+### Next URL:
+
+Try http://www.pythonchallenge.com/pc/def/oxygen.html (or simply replace channel with oxygen on the site’s next hint).
+
+The page may also nudge you with “it’s in the air. look at the letters.” — confirming OXYGEN.
+
+### 🧪 What You Learned
+Use HTML comments as puzzle hints.
+
+Explore ZIP metadata: both the archive comment and per-file comments.
+
+Follow a “linked-list” style chain and collect side-channel data (the comments) to reveal the answer.
+
+---
 ### Level 7:
 Level 7 shows an image with gray line in middle. It is obvious that clue will be in that line.So to read image, Pillow will be better suitable library. Now let's extract middle gray line from image and if we check pixels of middle line,we can see a pattern as RGB values which are same while last value being 255. Also the same pixel tuple is repeated for 7 times. So consider single value from them and ignore the other 6.  
 Now, the values can be considered as ASCII values. So converting these values into ASCII, we get the message as "smart guy, you made it. the next level is [105, 110, 116, 101, 103, 114, 105, 116, 121]pe_" Similar to pixel values, lets convert the given array into ASCII values which will result in "integrity". Hence the resulting url is http://www.pythonchallenge.com/pc/def/integrity.html
