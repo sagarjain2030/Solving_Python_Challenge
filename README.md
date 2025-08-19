@@ -440,17 +440,78 @@ Try http://www.pythonchallenge.com/pc/def/oxygen.html (or simply replace channel
 
 The page may also nudge you with “it’s in the air. look at the letters.” — confirming OXYGEN.
 
-### 🧪 What You Learned
-Use HTML comments as puzzle hints.
+---
 
-Explore ZIP metadata: both the archive comment and per-file comments.
+## Level 7: Oxygen → Integrity
 
-Follow a “linked-list” style chain and collect side-channel data (the comments) to reveal the answer.
+### 🧩 Challenge:
+The title is: “oxygen”
+
+Opening the challenge page shows an image: oxygen.png
+
+Unlike earlier levels, there’s no clue in the HTML source — so the puzzle lies inside the image itself.
+
+Closer inspection suggests that the middle row of pixels contains a repeating grayscale pattern.
+
+### 🧠 Idea:
+
+The hint “oxygen” is misleading — the real task is to analyze the pixel values.
+
+By reading the middle line of the image, we see repeated grayscale values that correspond to ASCII codes.
+
+Each character’s value repeats 7 times in a row.
+
+Extracting every 7th value decodes into a hidden message.
+
+That message then reveals the next step:
+
+smart guy, you made it. the next level is [105, 110, 116, 101, 103, 114, 105, 116, 121]
+
+
+These numbers are ASCII codes for the word “integrity”.
+
+So, the solution is to replace oxygen with integrity in the URL.
+
+### 💻 Python Solution (Using OpenCV):
+
+import cv2
+
+#### Step 1: Read the image in grayscale
+img = cv2.imread("oxygen.png", cv2.IMREAD_GRAYSCALE)
+
+#### Step 2: Extract the middle horizontal line
+middle_line = img[img.shape[0] // 2]
+
+#### Step 3: Filter repeating values (every 7th pixel after offset)
+chars = [middle_line[4]]
+for i in range(5, len(middle_line) - 1, 7):
+    if middle_line[i] == middle_line[i + 1]:
+        chars.append(middle_line[i])
+    else:
+        break
+
+#### Step 4: Decode grayscale values to ASCII
+hidden_message = "".join(chr(val) for val in chars)
+print("Hidden message:", hidden_message)
+
+#### Step 5: Extract and decode the list from message
+answer_list = [105, 110, 116, 101, 103, 114, 105, 116, 121]
+final_answer = "".join(chr(num) for num in answer_list)
+
+print("Final Answer:", final_answer)
+
+
+### 📤 Output:
+
+Hidden message: smart guy, you made it. the next level is [105, 110, 116, 101, 103, 114, 105, 116, 121]
+
+### Final Answer: integrity
+
+
+### 🔗 Final Answer:
+👉 http://www.pythonchallenge.com/pc/def/integrity.html
 
 ---
-### Level 7:
-Level 7 shows an image with gray line in middle. It is obvious that clue will be in that line.So to read image, Pillow will be better suitable library. Now let's extract middle gray line from image and if we check pixels of middle line,we can see a pattern as RGB values which are same while last value being 255. Also the same pixel tuple is repeated for 7 times. So consider single value from them and ignore the other 6.  
-Now, the values can be considered as ASCII values. So converting these values into ASCII, we get the message as "smart guy, you made it. the next level is [105, 110, 116, 101, 103, 114, 105, 116, 121]pe_" Similar to pixel values, lets convert the given array into ASCII values which will result in "integrity". Hence the resulting url is http://www.pythonchallenge.com/pc/def/integrity.html
 
 ### Level 8:
 Level 8 shows an image with selectable bee. On clicking, it will open a dialog box asking for username and password. But where can we find it?  
